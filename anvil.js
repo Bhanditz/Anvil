@@ -16,8 +16,13 @@ function say(message) {
   child.stdin.write('/say '+ message + '\n')
 }
 
+/* tell will say something from the server to a specific player */
+function tell(playerName, message) {
+  child.stdin.write('/tell ' + playerName + ' ' + message + '\n')
+}
+
 function login(playerName) {
   console.log('hi')
   say("welcome to my Anvil server " + playerName)
-  say("feel free to make pull requests to this script at github.com/dpeticol/anvil")
+  tell(playerName, "feel free to make pull requests to this script at github.com/dpeticol/anvil")
 }
