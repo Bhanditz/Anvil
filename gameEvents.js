@@ -15,7 +15,7 @@ var gameEvents = {
   }
 
 , 'logout': function(data, cb) {
-    if(data.match(/lost\ connection\:\ disconnect\.quitting)) {
+    if(data.match(/lost\ connection\:\ disconnect\.quitting/)) {
       callAssignedActions({ 
         'originalData': data
       , 'timeStamp': new Date(data.split(' ')[0] + "T" + data.split(' ')[1])
