@@ -1,5 +1,8 @@
 *
 
 !anvil.js
+!app.js
+!gameEvents.js
+!server.js
 !README.md
 !.gitignore

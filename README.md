@@ -1,6 +1,6 @@
 # Anvil.js
 
-This is the node script that runs my minecraft server on ```peticol.as```. The script execs the server jar and wraps stderr and stdin to script actions.
+This is the node script that runs my minecraft server on ```peticol.as```. Slowly building out into a framework called anvil that will allow scripting for minecraft servers usuing javascript. Actual scripting is taking place in ```app.js```.
 
 ### Currently the server
 * says a welcome message

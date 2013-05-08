@@ -1,28 +1,60 @@
+/* Anvil framework */
 var exec = require('child_process').exec
-  , child
+  , Server = require('./server.js')
+  , gameEvents = require('./gameEvents.js')
+  , Anvil
 
-child = exec('java -jar -Xms512M -Xmx756M minecraft_server.jar nogui');
+/* set up stdin and stderr */
+process.stdin.resume()
+process.stdin.setEncoding('utf8')
+process.stderr.resume()
+process.stderr.setEncoding('utf8')
 
-/* data is any output by the server, regex this for events */
-child.stderr.on('data', function (data) {
-  console.log(data)
-  if(data.match(/logged\ in/g)) {
-    login(data.split(' ')[3].split('[')[0])
+Anvil = function(flags) {
+  var mc
+    , info
+    , server
+  
+  /* define the actions object that will store the function arrays */
+  this.actions = {}
+  Object.keys(gameEvents).each(function (key) { this.actions[key] = [] })
+  
+  /* exec the minecraft server as a chil process */
+  flags = flags || ""
+  mc = exec('java -jar ' + flags + 'minecraft_server.jar nogui')
+  
+  server = new Server(mc)
+  
+  /* pipe stdin to the minecraft_server's stdin */
+  process.stdin.on('data', function (data) {
+    mc.stdin.write(data)
   }
-})
+  
+  /* start the stderr listener where game events are logged */
+  mc.stderr.on('data', function (data) {
+    
+    /* log the data to stderr as normal */
+    process.stderr.write(data)
+    
+    /* check all the action listeners */
+    Object.keys(gameEvents).forEach(function (actionName) {
+      gameEvents[actionName](data, function(info) {
+        actions[actionName].forEach(function (action) {
+          action(info, server)
+        })
+      })
+    })
 
-/* say will say something from the server to all players */
-function say(message) {
-  child.stdin.write('/say '+ message + '\n')
+  })
 }
 
-/* tell will say something from the server to a specific player */
-function tell(playerName, message) {
-  child.stdin.write('/tell ' + playerName + ' ' + message + '\n')
+/* construct Anvil's public facing action creating methods */
+Object.keys(gameEvents).map(function (name) {
+  Anvil.prototype[name] = function (action) {
+    if(typeof(action) == 'function') {
+      this.actions['login'].push(action);
+    }
+  }
 }
-
-function login(playerName) {
-  console.log('hi')
-  say("welcome to my Anvil server " + playerName)
-  tell(playerName, "feel free to make pull requests to this script at github.com/dpeticol/anvil")
-}
+  
+module.exports = Anvil
