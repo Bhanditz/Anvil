@@ -9,7 +9,7 @@ This is the node script that runs my minecraft server on ```peticol.as```. Slowl
 * create an assasins game, reward players for killing other players assigned
 * reward players with gold, diamond, weapons on correct kills
 
-__This needs lots of work so feel free to pull request__
+_This needs lots of work so feel free to pull request_
 
 # How does it work?
 
@@ -17,7 +17,7 @@ __This needs lots of work so feel free to pull request__
 
 This is the main controller. It's job is to start the minecraft server as a child process and wrap stdio. It also iterates through game events on input and actions defined in app.js as a response.
 
-_TODO:_
+__TODO:__
 * Kill the child process when the parent dies
 
 ## gameEvents.js
@@ -26,7 +26,7 @@ This is an object literal of potential game events. The key, is the name of the 
 
 This file was designed to be easily extensible with additional and custom events by people who are better at regex than myself.
 
-_TODO:_
+__TODO:__
 * player kills another player
 * player killed by some enemy
 * player burns in lava
@@ -37,7 +37,7 @@ _TODO:_
 
 Similar to gameEvent.js, this module is an instantiable object of responses that the end user can use in app.js. The ```mc``` object passed in is the chils minecraft server process. ```mc.stdin.write`` will write to the stdin of the minecraft server and speak on behalf of the server. Thus it can do anything the server can do.
 
-_TODO:_
+__TODO:__
 * kill a player
 * change the weather
 * change the time of day
