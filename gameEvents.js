@@ -4,9 +4,9 @@
  */
 
 var gameEvents = {
-  'login': function(data, callAssignedActions) {
+  'login': function (data, cb) {
     if(data.match(/logged\ in/g)) {
-      callAssignedActions({ 
+      cb({ 
         'originalData': data
       , 'timeStamp': new Date(data.split(' ')[0] + "T" + data.split(' ')[1])
       , 'playerName': data.split(' ')[3].split('[')[0]
@@ -16,7 +16,7 @@ var gameEvents = {
 
 , 'logout': function(data, cb) {
     if(data.match(/lost\ connection\:\ disconnect\.quitting/)) {
-      callAssignedActions({ 
+      cb({ 
         'originalData': data
       , 'timeStamp': new Date(data.split(' ')[0] + "T" + data.split(' ')[1])
       , 'playerName': data.split(' ')[3].split('[')[0]

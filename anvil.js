@@ -17,18 +17,19 @@ Anvil = function(flags) {
   
   /* define the actions object that will store the function arrays */
   this.actions = {}
-  Object.keys(gameEvents).each(function (key) { this.actions[key] = [] })
+  that = this
+  Object.keys(gameEvents).forEach(function (key) { that.actions[key] = [] })
   
   /* exec the minecraft server as a chil process */
   flags = flags || ""
-  mc = exec('java -jar ' + flags + 'minecraft_server.jar nogui')
+  mc = exec('java -jar ' + flags + ' minecraft_server.jar nogui')
   
   server = new Server(mc)
   
   /* pipe stdin to the minecraft_server's stdin */
   process.stdin.on('data', function (data) {
     mc.stdin.write(data)
-  }
+  })
   
   /* start the stderr listener where game events are logged */
   mc.stderr.on('data', function (data) {
@@ -39,7 +40,7 @@ Anvil = function(flags) {
     /* check all the action listeners */
     Object.keys(gameEvents).forEach(function (actionName) {
       gameEvents[actionName](data, function(info) {
-        actions[actionName].forEach(function (action) {
+        that.actions[actionName].forEach(function (action) {
           action(info, server)
         })
       })
@@ -55,6 +56,6 @@ Object.keys(gameEvents).map(function (name) {
       this.actions['login'].push(action);
     }
   }
-}
+})
   
 module.exports = Anvil
